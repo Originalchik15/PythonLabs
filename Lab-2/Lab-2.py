@@ -1,6 +1,6 @@
 import numpy as np
-import matplotlib as mpl
-import random as ran
+import matplotlib.pyplot as plt
+
 '''Формируется матрица F следующим образом: 
 1.1 скопировать в нее A 
 1.2 если количество нулей в B больше, чем в E, то поменять в ней местами B и C симметрично, 
@@ -51,8 +51,16 @@ def create_matrixF(result,b,c,d,e):
 def low_triag_matrix():
     None
 
-def matrix_expression():
-    None
+def matrix_expression(res,mA,mF,k):
+    if res == 1:
+        print("Выполняется решение примера A*At-K*F")
+        return (mA * np.transpose(mA)) - (k * mF)
+    else:
+        print("Выполняется решение примера (A-1+G-F-1)*K ")
+        g = np.tril(mA)
+        mA_inv = np.linalg.inv(mA)
+        mF_inv = np.linalg.inv(mF)
+        return (mA_inv + g - mF_inv) * k
 #----Main---
 
 while True:
@@ -74,7 +82,10 @@ result = 1 if search_zeros(submatrixB) > search_zeros(submatrixE) else 0
 matrixF = create_matrixF(result,submatrixB,submatrixC,submatrixD,submatrixE)
 print(f"Матрица F:\n{matrixF}")
 det_matrix_A = np.linalg.det(matrixA)
+k = int(input("Введите коэффицент K: "))
 print(f"Определитель матрицы А: {det_matrix_A}")
 diag_sum = sum(np.diagonal(matrixF)) + sum(np.fliplr(matrixF).diagonal())
 print(f"Сумма диагоналей матрицы F: {diag_sum}")
 result = 1 if det_matrix_A > diag_sum else 0
+answer = matrix_expression(result,matrixA,matrixF,k)
+print(f"Ответ:\n {answer}")
