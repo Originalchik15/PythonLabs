@@ -18,12 +18,34 @@ def create_submatrixes_random(s):
     matrixE = np.random.randint(-10,10,size=(s,s))
     return matrixB,matrixC,matrixD,matrixE
 
+
 def create_submatrixes_txt():
-    None
+    with open('Lab-2\matrixl2.txt', 'r') as file:
+        lines = file.readlines()
+        
+    matrices = []
+    current_matrix = []
 
-def create_submatrixes_gen():
-    None
+    for line in lines:
+        if line.strip():
+            current_matrix.append([int(num) for num in line.split()])
+        else:
+            if current_matrix:
+                matrices.append(np.array(current_matrix))
+                current_matrix = []
 
+    if current_matrix:
+        matrices.append(np.array(current_matrix))
+
+    return matrices
+
+def create_submatrixes_gen(size):
+    s = (size,size)
+    matrixB = np.full(s,1)
+    matrixC = np.full(s,2)
+    matrixD = np.full(s,3)
+    matrixE = np.full(s,4)
+    return matrixB,matrixC,matrixD,matrixE
 
 def create_matrix_from_sub(b,c,d,e):
     m1 = np.concatenate((b,e),axis=1)
@@ -48,8 +70,6 @@ def create_matrixF(result,b,c,d,e):
         mF = np.concatenate((m1,m2),axis=0)
         return mF
     
-def low_triag_matrix():
-    None
 
 def matrix_expression(res,mA,mF,k):
     if res == 1:
@@ -58,9 +78,43 @@ def matrix_expression(res,mA,mF,k):
     else:
         print("Выполняется решение примера (A-1+G-F-1)*K ")
         g = np.tril(mA)
-        mA_inv = np.linalg.inv(mA)
-        mF_inv = np.linalg.inv(mF)
+        detA = np.linalg.det(mA)
+        if detA == 0:
+            mA_inv = np.linalg.pinv(mA)
+            mF_inv = np.linalg.pinv(mF)
+        else:
+            mA_inv = np.linalg.inv(mA)
+            mF_inv = np.linalg.inv(mF)
         return (mA_inv + g - mF_inv) * k
+    
+def plot_column_means(matrix):
+    col_means = np.mean(matrix, axis=0)
+    plt.figure(figsize=(6, 4))
+    plt.plot(np.arange(len(col_means)), col_means)
+    plt.title("Среднее значение по столбцам матрицы")
+    plt.xlabel("Индекс столбца")
+    plt.ylabel("Среднее значение")
+    plt.grid(True)
+    plt.show()
+
+def plot_row_means(matrix):
+    row_means = np.mean(matrix, axis=1)
+    plt.figure(figsize=(6, 4))
+    plt.plot(np.arange(len(row_means)), row_means)
+    plt.title("Среднее значение по строкам матрицы")
+    plt.xlabel("Индекс строки")
+    plt.ylabel("Среднее значение")
+    plt.grid(True)
+    plt.show()
+
+def plot_heatmap(matrix):
+    plt.figure(figsize=(6, 4))
+    plt.imshow(matrix, cmap='plasma', interpolation='nearest')
+    plt.colorbar(label='Значения матрицы')
+    plt.title("Тепловая карта матрицы")
+    plt.xlabel("Индекс столбца")
+    plt.ylabel("Индекс строки")
+    plt.show()
 #----Main---
 
 while True:
@@ -70,8 +124,18 @@ while True:
         submatrixB,submatrixC,submatrixD,submatrixE = create_submatrixes_random(size)
         matrixA = create_matrix_from_sub(submatrixB,submatrixC,submatrixD,submatrixE)
         break
-    else: 
-        print("In dev")
+    elif chooser == 2:
+        submatrixB = create_submatrixes_txt()[0]
+        submatrixC = create_submatrixes_txt()[1]
+        submatrixD = create_submatrixes_txt()[2]
+        submatrixE = create_submatrixes_txt()[3]
+        matrixA = create_matrix_from_sub(submatrixB,submatrixC,submatrixD,submatrixE)
+        break
+    elif chooser == 3:
+        size = int(input("Введите размер матрицы: "))
+        submatrixB,submatrixC,submatrixD,submatrixE = create_submatrixes_gen(size)
+        matrixA = create_matrix_from_sub(submatrixB,submatrixC,submatrixD,submatrixE)
+        break
 
 print("Результат")
 print(f"Подматрица B:\n{submatrixB}\nПодматрица C:\n{submatrixC}\nПодматрица D:\n{submatrixD}\nПодматрица E:\n{submatrixE}")
@@ -89,3 +153,6 @@ print(f"Сумма диагоналей матрицы F: {diag_sum}")
 result = 1 if det_matrix_A > diag_sum else 0
 answer = matrix_expression(result,matrixA,matrixF,k)
 print(f"Ответ:\n {answer}")
+plot_row_means(matrixF)
+plot_column_means(matrixF)
+plot_heatmap(matrixF)
