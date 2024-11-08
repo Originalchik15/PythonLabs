@@ -24,17 +24,8 @@ def split_alot(num_input):
     print(output)
 
 while True:
-    choose = int(input("Что используем: 1 - .txt 2 - Ручной ввод\nВаш выбор: "))
-    if choose == 1:
-        with open('Lab-3/input.txt','r') as f:
-            num_input = f.read()
-        split_alot(num_input) 
-        break
-    elif choose == 2:
-        num_input = int(input("Введите любой набор чисел"))
-        split_alot(num_input)
-        break
-    else:
-        print("Введено неверное число, попробуйте снова")
-
+    with open('Lab-3/input.txt','r') as f:
+        num_input = f.read()
+    split_alot(num_input) 
+    break
 
