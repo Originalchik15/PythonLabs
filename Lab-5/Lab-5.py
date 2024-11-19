@@ -22,7 +22,7 @@ def F_rec(n):
         return 0
     if n < 2:
         return 1
-    pr =(-1)**n * (2 * F_rec(n-1)//fac(n) + F_rec(n-3)// fac(2*n))
+    pr =(-1)**n * (2 * F_rec(n-1)/fac(n) + F_rec(n-3)/ fac(2*n))
     return pr
 
 def F_it(n):
@@ -32,7 +32,7 @@ def F_it(n):
         for i in range(2,n+1):
             fm1 = val[i-1] if i - 1 >= 0 else 0
             fm3 = val[i-3] if i - 3 >= 0 else 0
-            pr = (-1) ** i * (2 * fm1  // math.factorial(i) + fm3 // math.factorial(2 * i))
+            pr = (-1) ** i * (2 * fm1  / math.factorial(i) + fm3 / math.factorial(2 * i))
             val.append(pr)
         return val[n]
 
@@ -42,10 +42,13 @@ def compare_functions(n, repeats=1000):
     for n in range(1, n+1):
         rtime = timeit.timeit(lambda: F_rec(n), number=10) * 100  
         itime = timeit.timeit(lambda: F_it(n), number=10) * 100 
-        print(f"{n}         {rtime:<20.6f}{itime:<20.6f}")
+        
+        print(f"{n}         {rtime:.6f}            {itime:.6f}")
 
 num = int(input("Введите число для вычисления функций: "))
 n_fact = math.factorial(num)
 n2_fact = math.factorial(2 * num)
 compare_functions(num)
-
+answr = F_rec(num)
+answit = F_it(num)
+print(f"Рекурсивно: {answr}\nИтеративно: {answit}")
