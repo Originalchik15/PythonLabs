@@ -19,6 +19,8 @@ def split_alot(num_input):
     check = 1
     output = ''
     for num_part in num_input:
+        if not num_part.isdigit() and num_part != ' ':
+            continue
         flag, check = check_num(num_part, check)
         output += flag
     print(output)
