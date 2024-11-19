@@ -70,7 +70,7 @@ def create_matrixF(result,b,c,d,e):
         mF = np.concatenate((m1,m2),axis=0)
         return mF
     
-
+1
 def matrix_expression(res,mA,mF,k):
     if res == 1:
         print("Выполняется решение примера A*At-K*F")
