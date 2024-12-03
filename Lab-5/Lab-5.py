@@ -25,15 +25,17 @@ def F_rec(n):
     return pr
 
 def F_it(n):
-        if n < 2:
-            return 1
-        val = [1,1]
-        for i in range(2,n+1):
-            fm1 = val[i-1] if i - 1 >= 0 else 0
-            fm3 = val[i-3] if i - 3 >= 0 else 0
-            pr = (-1) ** i * (2 * fm1  / math.factorial(i) + fm3 / math.factorial(2 * i))
-            val.append(pr)
-        return val[n]
+    if n < 2:
+        return 1
+    val = [1,1]
+    mfac = math.factorial(2) 
+    for i in range(2,n+1):
+        fm1 = val[i-1] if i - 1 >= 0 else 0
+        fm3 = val[i-3] if i - 3 >= 0 else 0
+        pr = (-1) ** i * (2 * fm1  / mfac + fm3 / mfac * 2)
+        mfac *= i
+        val.append(pr)
+    return val[n]
 
 def compare_functions(n, repeats=1000):
     print("n         Рекурсивно (мс)     Итерационно (мс)")
