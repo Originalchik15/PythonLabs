@@ -1,6 +1,6 @@
 import math
 import timeit
-from functools import lru_cache
+
 """Задана рекуррентная функция. 
 Область определения функции – натуральные числа. 
 Написать программу сравнительного вычисления данной функции 
@@ -11,12 +11,11 @@ from functools import lru_cache
 Обязательное требование – минимизация времени выполнения и объема памяти.
 F(x<2) = 1; F(n) = (-1)n*(2F(n-1)/n! + F(n-3)/(2n)!)"""
 
-@lru_cache(maxsize=None)
 def fac(n):
     if n == 0 or n == 1:
         return 1
     return n * fac(n-1)
-@lru_cache(maxsize=None)
+
 def F_rec(n):
     if n < 0:
         return 0
