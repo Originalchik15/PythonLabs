@@ -11,30 +11,38 @@ import timeit
 Обязательное требование – минимизация времени выполнения и объема памяти.
 F(x<2) = 1; F(n) = (-1)n*(2F(n-1)/n! + F(n-3)/(2n)!)"""
 
+memo = {}
 def fac(n):
+    if n in memo:
+        return memo[n]
     if n == 0 or n == 1:
         return 1
-    return n * fac(n-1)
+    result = n * fac(n - 1)
+    memo[n] = result
+    return result
 
 def F_rec(n):
     if n < 0:
         return 0
     if n < 2:
         return 1
-    pr =(-1)**n * (2 * F_rec(n-1)/fac(n) + F_rec(n-3)/ fac(2*n))
+    sign = -1 if n % 2 else 1
+    pr = sign * (2 * F_rec(n-1) / fac(n) + F_rec(n-3) / fac(2*n))
     return pr
 
 def F_it(n):
     if n < 2:
         return 1
-    val = [1,1]
-    mfac = math.factorial(2) 
-    for i in range(2,n+1):
-        fm1 = val[i-1] if i - 1 >= 0 else 0
-        fm3 = val[i-3] if i - 3 >= 0 else 0
-        pr = (-1) ** i * (2 * fm1  / mfac + fm3 / mfac * 2)
-        mfac *= i
+    val = [1, 1]
+    sign = 1  
+    for i in range(2, n + 1):
+        fm1 = val[i - 1] if i - 1 >= 0 else 0
+        fm3 = val[i - 3] if i - 3 >= 0 else 0
+        fn = math.factorial(i)
+        fn2 = math.factorial(2 * i) 
+        pr = sign * (2 * fm1 / fn + fm3 / fn2)
         val.append(pr)
+        sign *= -1
     return val[n]
 
 def compare_functions(n, repeats=1000):

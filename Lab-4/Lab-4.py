@@ -10,6 +10,7 @@ digit_to_word = {
     '6': 'шесть',
     '8': 'восемь',
 }
+
 def transform_even_number(number):
     result = []
     i = 1
@@ -21,21 +22,19 @@ def transform_even_number(number):
             result.append(digit_to_word[char])
         else:
             result.append(char)
-        i+=1
+        i += 1
     return ''.join(result)
 
 def check_num(content):
- 
-    pattern = r'(?<!\S)-?\d+'
+    pattern = r'(?<!\S)-?\d*[02468](?!\S)'
     matches = re.findall(pattern, content)  
 
     result = []
 
     for match in matches:
-        number = int(match)  
-        if number % 2 == 0:  
-            transformed = transform_even_number(match)
-            result.append(transformed)
+        transformed = transform_even_number(match)
+        result.append(transformed)
+    
     print(' '.join(result))
 
 while True:
