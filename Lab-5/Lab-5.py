@@ -35,14 +35,16 @@ def F_it(n):
         return 1
     val = [1, 1]
     sign = 1  
+    fn = 1
+    fn2 = 2
     for i in range(2, n + 1):
         fm1 = val[i - 1] if i - 1 >= 0 else 0
         fm3 = val[i - 3] if i - 3 >= 0 else 0
-        fn = math.factorial(i)
-        fn2 = math.factorial(2 * i) 
+        fn *= i
+        fn2 *= (2 * i) * (2 * i - 1)
+        sign = 1 if i % 2 == 0 else -1
         pr = sign * (2 * fm1 / fn + fm3 / fn2)
         val.append(pr)
-        sign *= -1
     return val[n]
 
 def compare_functions(n, repeats=1000):
